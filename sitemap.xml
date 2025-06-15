@@ -1,65 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
-  <!-- Homepage (Highest Priority) -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://regalialawn.in/</loc>
-    <lastmod>2024-06-20</lastmod>
-    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://regalialawn.in/" />
+    <changefreq>monthly</changefreq>
   </url>
 
-  <!-- Key Sections -->
   <url>
     <loc>https://regalialawn.in/#rooms</loc>
-    <lastmod>2024-06-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://regalialawn.in/#packages</loc>
-    <lastmod>2024-06-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://regalialawn.in/#events</loc>
-    <lastmod>2024-06-20</lastmod>
-    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://regalialawn.in/#contact</loc>
-    <lastmod>2024-06-20</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
   </url>
 
-  <!-- Future Blog Pages (Add when created) -->
-  <!--
   <url>
-    <loc>https://regalialawn.in/blog/wedding-venue-tips</loc>
-    <lastmod>2024-06-20</lastmod>
+    <loc>https://regalialawn.in/#packages</loc>
+    <priority>0.8</priority>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
-  -->
-  
-  <!-- Image Sitemap (Optional but recommended) -->
+
   <url>
-    <loc>https://regalialawn.in/</loc>
-    <image:image>
-      <image:loc>https://regalialawn.in/images/hero-image.jpg</image:loc>
-      <image:caption>Regalia Lawn Wedding Venue in Nagpur</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://regalialawn.in/images/rooms/bride-suite.jpg</image:loc>
-      <image:caption>Luxury Bride's Suite at Regalia Lawn</image:caption>
-    </image:image>
+    <loc>https://regalialawn.in/#events</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
+
+  <url>
+    <loc>https://wa.me/919730142948</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://www.instagram.com/regalia_lawns?igsh=aWlveHBncG1leTBx</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
+    <loc>mailto:regalia.lawns@gmail.com</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
+    <loc>tel:+919730142948</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+  </url>
+
 </urlset>
