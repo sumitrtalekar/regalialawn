@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regalia Lawn - Wedding Invoice Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .password-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: all 0.5s ease;
+        }
+        
+        .password-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+        
+        .password-title {
+            color: #8b7355;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        
+        .password-submit {
+            background-color: #8b7355;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .password-submit:hover {
+            background: #6b5a45;
+        }
+        
+        .password-error {
+            color: #e74c3c;
+            margin-top: 15px;
+            height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .password-error.visible {
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .container.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #8b7355 0%, #6b5a45 100%);
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background: #f9f5f0;
+            padding: 20px;
+            border-bottom: 2px solid #E8D8C5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            color: #8b7355;
+            font-size: 1.8rem;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #8b7355;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #E8D8C5;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #8b7355;
+            outline: none;
+        }
+
+        .service-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .service-row input {
+            padding: 10px;
+            border: 1px solid #E8D8C5;
+            border-radius: 4px;
+        }
+
+        .service-row input.service-name {
+            flex: 2;
+        }
+
+        .service-row input.service-desc {
+            flex: 3;
+        }
+
+        .service-row input.quantity,
+        .service-row input.price {
+            flex: 1;
+        }
+
+        .remove-service {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .remove-service:hover {
+            background: #c0392b;
+        }
+
+        .add-service {
+            background: #8b7355;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .add-service:hover {
+            background: #6b5a45;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-prev {
+            background: #e67e22;
+            color: white;
+        }
+
+        .btn-prev:hover {
+            background: #d35400;
+        }
+
+        .btn-next {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #2980b9;
+        }
+
+        .btn-generate {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-generate:hover {
+            background: #219653;
+        }
+
+        /* Invoice Preview Styling */
+        .invoice-container {
+            max-width: 900px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: none;
+            position: relative;
+            border: 1px solid #E8D8C5;
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.98) 100%);
+            margin: 40px auto;
+            padding: 50px;
+        }
+
+        .invoice-container.visible {
+            display: block;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><text x="50%" y="50%" font-size="24" fill="rgba(139,115,85,0.08)" text-anchor="middle" dominant-baseline="middle" transform="rotate(-30 100 100)">REGALIA LAWN</text></svg>');
+            background-repeat: repeat;
+            opacity: 0.08;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .invoice-header {
+            text-align: center;
+            border-bottom: 2px solid #E8D8C5;
+            padding-bottom: 25px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            color: #9D7C5E;
+        }
+
+        .invoice-header h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .invoice-header p {
+            color: #777;
+        }
+
+        .confidential-stamp {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background-color: #9D7C5E;
+            color: white;
+            padding: 8px 20px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transform: rotate(15deg);
+            border-radius: 50px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            font-weight: 500;
+            opacity: 0.9;
+            z-index: 2;
+        }
+
+        .invoice-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .client-info, .invoice-details {
+            flex: 1;
+        }
+
+        .client-info h3, .invoice-details h3 {
+            margin-bottom: 10px;
+            color: #9D7C5E;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+
+        .invoice-table th {
+            background-color: #f9f5f0;
+            color: #9D7C5E;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid #E8D8C5;
+        }
+
+        .invoice-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #E8D8C5;
+        }
+
+        .invoice-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .invoice-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .payment-summary {
+            background: #f9f5f0;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed #E8D8C5;
+        }
+
+        .payment-row:last-child {
+            border-bottom: none;
+        }
+
+        .payment-label {
+            font-weight: 500;
+            color: #8b7355;
+        }
+
+        .payment-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .total-row {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #9D7C5E;
+        }
+
+        .terms {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(157, 124, 94, 0.08);
+            border-radius: 8px;
+            border: 1px solid #E8D8C5;
+        }
+
+        .terms h3 {
+            margin-top: 0;
+            color: #9D7C5E;
+            border-bottom: 1px solid #E8D8C5;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .terms ul {
+            padding-left: 25px;
+        }
+        
+        .terms li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .terms li:before {
+            content: '•';
+            color: #C5A880;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .signature {
+            margin-top: 60px;
+            text-align: right;
+        }
+
+        .signature p {
+            margin-top: 20px;
+            border-top: 1px solid #9D7C5E;
+            padding-top: 10px;
+            display: inline-block;
+            color: #9D7C5E;
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            font-size: 13px;
+            color: #999;
+            border-top: 1px solid #E8D8C5;
+            padding-top: 20px;
+        }
+
+        .invoice-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .invoice-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            background: #8b7355;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .invoice-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .invoice-container {
+                padding: 30px;
+                margin: 15px;
+            }
+            
+            .invoice-info {
+                flex-direction: column;
+            }
+            
+            .client-info, .invoice-details {
+                margin-bottom: 20px;
+            }
+            
+            .confidential-stamp {
+                top: 15px;
+                right: 15px;
+                padding: 6px 15px;
+                font-size: 12px;
+            }
+            
+            .service-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .navigation, .invoice-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn, .invoice-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .password-container, .header, .card:not(.invoice-container), .navigation, .invoice-actions {
+                display: none !important;
+            }
+            
+            .invoice-container {
+                box-shadow: none;
+                border: none;
+                margin: 0;
+                padding: 15mm;
+                width: 210mm;
+                min-height: 297mm;
+                page-break-after: always;
+            }
+            
+            .watermark {
+                opacity: 0.15;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Protection Screen -->
+    <div class="password-container" id="passwordScreen">
+        <div class="password-box" id="passwordBox">
+            <div class="password-title">
+                <i class="fas fa-lock"></i> Secure Invoice Access
+            </div>
+            <p style="margin-bottom: 20px; color: #666;">
+                Enter your provided password to access your wedding invoice
+            </p>
+            <input type="password" class="password-input" id="passwordInput" placeholder="Enter password">
+            <button class="password-submit" id="passwordSubmit">Access Invoice</button>
+            <div class="password-error" id="passwordError">
+                Incorrect password. Please try again.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content (Hidden until password is entered) -->
+    <div class="container" id="mainContent">
+        <div class="header">
+            <h1><i class="fas fa-ring"></i> Regalia Lawn</h1>
+            <p>Premium Wedding Venue & Event Services - Invoice Generator</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-cogs"></i> Configure Your Invoice</h2>
+            </div>
+            <div class="card-body">
+                <!-- Client Information Section -->
+                <div class="form-section active" id="client-section">
+                    <h3 style="color: #8b7355; margin-bottom: 20px;"><i class="fas fa-user-friends"></i> Client Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientName">Client Name(s)</label>
+                            <input type="text" id="clientName" placeholder="e.g., Sarah & Michael Johnson" value="Sarah & Michael Johnson">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientEmail">Email</label>
+                            <input type="email" id="clientEmail" placeholder="e.g., sarah.michael@example.com" value="sarah.michael@example.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientAddress">Address</label>
+                            <input type="text" id="clientAddress" placeholder="e.g., 123 Maple Street, Springfield" value="123 Maple Street, Springfield">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientPhone">Phone</label>
+                            <input type="tel" id="clientPhone" placeholder="e.g., (555) 123-4567" value="(555) 123-4567">
+                        </div>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button class="btn btn-prev" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button class="btn btn-next" id="next-to-details"><i class="fas fa-arrow-right"></i> Next: Invoice Details</button>
+                    </div>
+                </div>
+                
+                <!-- Invoice Details Section -->
+                <div class="form-section" id="details-section">
+                    <h3 style="color: #8b7355; margin-bottom: 20px;"><i class="fas fa-file-invoice"></i> Invoice Details</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoiceNumber">Invoice Number</label>
+                            <input type="text" id="invoiceNumber" placeholder="e.g., RL-2023-045" value="RL-2023-045">
+                        </div>
+                        <div class="form-group">
+                            <label for="invoiceDate">Invoice Date</label>
+                            <input type="date" id="invoiceDate" value="2023-10-15">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventDate">Event Date</label>
+                            <input type="date" id="eventDate" value="2024-06-22">
+                        </div>
+                        <div class="form-group">
+                            <label for="dueDate">Due Date</label>
+                            <input type="date" id="dueDate" value="2023-12-15">
+                        </div>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button class="btn btn-prev" id="prev-to-client"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button class="btn btn-next" id="next-to-services"><i class="fas fa-arrow-right"></i> Next: Services</button>
+                    </div>
+                </div>
+                
+                <!-- Services Section -->
+                <div class="form-section" id="services-section">
+                    <h3 style="color: #8b7355; margin-bottom: 20px;"><i class="fas fa-concierge-bell"></i> Wedding Services</h3>
+                    
+                    <div id="servicesContainer">
+                        <div class="service-row">
+                            <input type="text" class="service-name" placeholder="Service Name" value="Venue Rental">
+                            <input type="text" class="service-desc" placeholder="Description" value="Premium garden venue for ceremony & reception">
+                            <input type="number" class="service-quantity quantity" placeholder="Qty" min="1" value="1">
+                            <input type="number" class="service-price price" placeholder="Price" min="0" step="0.01" value="5500.00">
+                            <button class="remove-service"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="service-row">
+                            <input type="text" class="service-name" placeholder="Service Name" value="Catering Package">
+                            <input type="text" class="service-desc" placeholder="Description" value="Premium 3-course meal for 100 guests">
+                            <input type="number" class="service-quantity quantity" placeholder="Qty" min="1" value="1">
+                            <input type="number" class="service-price price" placeholder="Price" min="0" step="0.01" value="8500.00">
+                            <button class="remove-service"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="service-row">
+                            <input type="text" class="service-name" placeholder="Service Name" value="Photography">
+                            <input type="text" class="service-desc" placeholder="Description" value="8 hours coverage with 2 photographers">
+                            <input type="number" class="service-quantity quantity" placeholder="Qty" min="1" value="1">
+                            <input type="number" class="service-price price" placeholder="Price" min="0" step="0.01" value="2500.00">
+                            <button class="remove-service"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    
+                    <button class="add-service" id="addService">
+                        <i class="fas fa-plus"></i> Add Service
+                    </button>
+                    
+                    <div class="form-row" style="margin-top: 30px;">
+                        <div class="form-group">
+                            <label for="advanceAmount">Advance Amount ($)</label>
+                            <input type="number" id="advanceAmount" min="0" step="0.01" value="5000.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="balanceAmount">Balance Amount ($)</label>
+                            <input type="number" id="balanceAmount" min="0" step="0.01" value="11500.00">
+                        </div>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button class="btn btn-prev" id="prev-to-details"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button class="btn btn-generate" id="generateInvoice"><i class="fas fa-file-invoice"></i> Generate Invoice</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Invoice Preview -->
+        <div class="invoice-container" id="invoiceContent">
+            <div class="watermark"></div>
+            
+            <div class="invoice-header">
+                <h1>REGALIA LAWN</h1>
+                <p>Premium Wedding Venue & Event Services</p>
+                <div class="confidential-stamp">CONFIDENTIAL</div>
+            </div>
+
+            <div class="invoice-info">
+                <div class="client-info">
+                    <h3>Client Information</h3>
+                    <p id="previewClientName"><strong>Sarah & Michael Johnson</strong></p>
+                    <p id="previewClientAddress">123 Maple Street, Springfield</p>
+                    <p id="previewClientEmail">sarah.michael@example.com</p>
+                    <p id="previewClientPhone">(555) 123-4567</p>
+                </div>
+                <div class="invoice-details">
+                    <h3>Invoice Details</h3>
+                    <p><strong>Invoice #:</strong> <span id="previewInvoiceNumber">RL-2023-045</span></p>
+                    <p><strong>Date:</strong> <span id="previewInvoiceDate">October 15, 2023</span></p>
+                    <p><strong>Event Date:</strong> <span id="previewEventDate">June 22, 2024</span></p>
+                    <p><strong>Due Date:</strong> <span id="previewDueDate">December 15, 2023</span></p>
+                </div>
+            </div>
+
+            <h2>Wedding Services</h2>
+            <table class="invoice-table" id="servicesTable">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Venue Rental</td>
+                        <td>Premium garden venue for ceremony & reception</td>
+                        <td>1</td>
+                        <td>$5,500.00</td>
+                        <td>$5,500.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="payment-summary">
+                <div class="payment-row">
+                    <span class="payment-label">Subtotal:</span>
+                    <span class="payment-value" id="subtotalAmount">$0.00</span>
+                </div>
+                <div class="payment-row">
+                    <span class="payment-label">Tax (10%):</span>
+                    <span class="payment-value" id="taxAmount">$0.00</span>
+                </div>
+                <div class="payment-row total-row">
+                    <span class="payment-label">Total Amount:</span>
+                    <span class="payment-value" id="totalAmount">$0.00</span>
+                </div>
+                <div class="payment-row">
+                    <span class="payment-label">Advance Paid:</span>
+                    <span class="payment-value" id="advanceDisplay">$0.00</span>
+                </div>
+                <div class="payment-row total-row">
+                    <span class="payment-label">Balance Due:</span>
+                    <span class="payment-value" id="balanceDisplay">$0.00</span>
+                </div>
+            </div>
+
+            <div class="terms">
+                <h3>Payment Terms & Conditions</h3>
+                <ul>
+                    <li>A 30% deposit is required to secure your booking</li>
+                    <li>Remaining balance due 30 days before the event</li>
+                    <li>Cancellations more than 90 days prior: 50% refund</li>
+                    <li>Cancellations within 90 days: non-refundable</li>
+                    <li>Additional charges may apply for overtime services</li>
+                    <li>All prices include applicable taxes</li>
+                </ul>
+            </div>
+
+            <div class="signature">
+                <p>Authorized Signature</p>
+                <p>Jennifer Parker, Event Director</p>
+            </div>
+
+            <div class="footer">
+                <p>Regalia Lawn • 456 Garden Avenue, Bloomfield, CA 90210</p>
+                <p>contact@regalialawn.com • (555) 987-6543 • www.regalialawn.com</p>
+                <p style="margin-top: 10px;">Thank you for choosing Regalia Lawn for your special day!</p>
+            </div>
+            
+            <div class="invoice-actions">
+                <button class="invoice-btn" id="editInvoice">
+                    <i class="fas fa-edit"></i> Edit Invoice
+                </button>
+                <button class="invoice-btn" id="printInvoice">
+                    <i class="fas fa-print"></i> Print Invoice
+                </button>
+                <button class="invoice-btn" id="logoutButton">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password elements
+            const passwordScreen = document.getElementById('passwordScreen');
+            const passwordBox = document.getElementById('passwordBox');
+            const passwordInput = document.getElementById('passwordInput');
+            const passwordSubmit = document.getElementById('passwordSubmit');
+            const passwordError = document.getElementById('passwordError');
+            
+            // Main content elements
+            const mainContent = document.getElementById('mainContent');
+            
+            // Correct password
+            const correctPassword = "Regalia2023";
+            
+            // Password submit functionality
+            passwordSubmit.addEventListener('click', function() {
+                const enteredPassword = passwordInput.value;
+                
+                if (enteredPassword === correctPassword) {
+                    // Hide password screen and show main content
+                    passwordScreen.style.opacity = '0';
+                    passwordScreen.style.visibility = 'hidden';
+                    
+                    // Add slight delay for smooth transition
+                    setTimeout(function() {
+                        mainContent.classList.add('visible');
+                    }, 300);
+                } else {
+                    // Show error message
+                    passwordError.classList.add('visible');
+                    passwordInput.style.borderColor = '#e74c3c';
+                    
+                    // Clear input and focus after incorrect attempt
+                    setTimeout(function() {
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                    }, 1000);
+                    
+                    // Remove error after 3 seconds
+                    setTimeout(function() {
+                        passwordError.classList.remove('visible');
+                        passwordInput.style.borderColor = '#ddd';
+                    }, 3000);
+                }
+            });
+            
+            // Form navigation
+            const sections = document.querySelectorAll('.form-section');
+            let currentSection = 0;
+            
+            // Navigation buttons
+            document.getElementById('next-to-details').addEventListener('click', () => navigateTo(1));
+            document.getElementById('next-to-services').addEventListener('click', () => navigateTo(2));
+            document.getElementById('prev-to-client').addEventListener('click', () => navigateTo(0));
+            document.getElementById('prev-to-details').addEventListener('click', () => navigateTo(1));
+            
+            function navigateTo(index) {
+                sections[currentSection].classList.remove('active');
+                sections[index].classList.add('active');
+                currentSection = index;
+            }
+            
+            // Add service row
+            document.getElementById('addService').addEventListener('click', function() {
+                const servicesContainer = document.getElementById('servicesContainer');
+                const newRow = document.createElement('div');
+                newRow.className = 'service-row';
+                newRow.innerHTML = `
+                    <input type="text" class="service-name" placeholder="Service Name">
+                    <input type="text" class="service-desc" placeholder="Description">
+                    <input type="number" class="service-quantity quantity" placeholder="Qty" min="1" value="1">
+                    <input type="number" class="service-price price" placeholder="Price" min="0" step="0.01">
+                    <button class="remove-service"><i class="fas fa-times"></i></button>
+                `;
+                servicesContainer.appendChild(newRow);
+                
+                // Add event listener to remove button
+                newRow.querySelector('.remove-service').addEventListener('click', function() {
+                    if(servicesContainer.children.length > 1) {
+                        servicesContainer.removeChild(newRow);
+                    } else {
+                        alert("You need at least one service item.");
+                    }
+                });
+            });
+            
+            // Add event listeners to existing remove buttons
+            document.querySelectorAll('.remove-service').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const servicesContainer = document.getElementById('servicesContainer');
+                    if(servicesContainer.children.length > 1) {
+                        servicesContainer.removeChild(btn.parentElement);
+                    } else {
+                        alert("You need at least one service item.");
+                    }
+                });
+            });
+            
+            // Generate invoice
+            document.getElementById('generateInvoice').addEventListener('click', function() {
+                // Collect client info
+                document.getElementById('previewClientName').innerHTML = `<strong>${document.getElementById('clientName').value || 'Sarah & Michael Johnson'}</strong>`;
+                document.getElementById('previewClientAddress').textContent = document.getElementById('clientAddress').value || '123 Maple Street, Springfield';
+                document.getElementById('previewClientEmail').textContent = document.getElementById('clientEmail').value || 'sarah.michael@example.com';
+                document.getElementById('previewClientPhone').textContent = document.getElementById('clientPhone').value || '(555) 123-4567';
+                
+                // Collect invoice details
+                document.getElementById('previewInvoiceNumber').textContent = document.getElementById('invoiceNumber').value || 'RL-2023-045';
+                
+                const invoiceDate = document.getElementById('invoiceDate').value;
+                document.getElementById('previewInvoiceDate').textContent = invoiceDate ? formatDate(invoiceDate) : 'October 15, 2023';
+                
+                const eventDate = document.getElementById('eventDate').value;
+                document.getElementById('previewEventDate').textContent = eventDate ? formatDate(eventDate) : 'June 22, 2024';
+                
+                const dueDate = document.getElementById('dueDate').value;
+                document.getElementById('previewDueDate').textContent = dueDate ? formatDate(dueDate) : 'December 15, 2023';
+                
+                // Collect services
+                const servicesTable = document.getElementById('servicesTable').querySelector('tbody');
+                servicesTable.innerHTML = '';
+                
+                let subtotal = 0;
+                
+                document.querySelectorAll('.service-row').forEach(row => {
+                    const name = row.querySelector('.service-name').value || 'Service Name';
+                    const desc = row.querySelector('.service-desc').value || 'Service Description';
+                    const quantity = parseInt(row.querySelector('.service-quantity').value) || 1;
+                    const price = parseFloat(row.querySelector('.service-price').value) || 0;
+                    const total = quantity * price;
+                    
+                    subtotal += total;
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${name}</td>
+                        <td>${desc}</td>
+                        <td>${quantity}</td>
+                        <td>$${price.toFixed(2)}</td>
+                        <td>$${total.toFixed(2)}</td>
+                    `;
+                    servicesTable.appendChild(tr);
+                });
+                
+                // Calculate taxes and total
+                const taxRate = 0.10; // 10% tax
+                const tax = subtotal * taxRate;
+                const total = subtotal + tax;
+                
+                // Get advance and balance
+                const advanceAmount = parseFloat(document.getElementById('advanceAmount').value) || 0;
+                const balanceAmount = parseFloat(document.getElementById('balanceAmount').value) || 0;
+                
+                // Update amounts display
+                document.getElementById('subtotalAmount').textContent = `$${subtotal.toFixed(2)}`;
+                document.getElementById('taxAmount').textContent = `$${tax.toFixed(2)}`;
+                document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+                document.getElementById('advanceDisplay').textContent = `$${advanceAmount.toFixed(2)}`;
+                document.getElementById('balanceDisplay').textContent = `$${balanceAmount.toFixed(2)}`;
+                
+                // Show invoice preview
+                document.getElementById('invoiceContent').classList.add('visible');
+                
+                // Scroll to invoice
+                document.getElementById('invoiceContent').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Edit invoice
+            document.getElementById('editInvoice').addEventListener('click', function() {
+                document.getElementById('invoiceContent').classList.remove('visible');
+                document.getElementById('services-section').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Print invoice
+            document.getElementById('printInvoice').addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Logout functionality
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                mainContent.classList.remove('visible');
+                document.getElementById('invoiceContent').classList.remove('visible');
+                
+                setTimeout(() => {
+                    passwordScreen.style.opacity = '1';
+                    passwordScreen.style.visibility = 'visible';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }, 300);
+            });
+            
+            // Allow pressing Enter to submit password
+            passwordInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    passwordSubmit.click();
+                }
+            });
+            
+            // Helper function to format date
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString('en-US', options);
+            }
+            
+            // Set default dates
+            const today = new Date().toISOString().split('T')[0];
+            const nextMonth = new Date();
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            const nextMonthStr = nextMonth.toISOString().split('T')[0];
+            
+            document.getElementById('invoiceDate').value = today;
+            document.getElementById('eventDate').value = nextMonthStr;
+            document.getElementById('dueDate').value = nextMonthStr;
+        });
+    </script>
+</body>
+</html>
