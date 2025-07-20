@@ -1,0 +1,2251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regalia Lawn - Premium Wedding Catering</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF Generation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --gold: #c9a145;
+            --gold-light: #e8c78e;
+            --gold-dark: #8e6c4d;
+            --brown: #5a432c;
+            --cream: #f9f7f4;
+            --white: #ffffff;
+            --gray: #777777;
+        }
+        
+        body {
+            background-color: var(--cream);
+            color: var(--brown);
+            line-height: 1.6;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--white);
+            box-shadow: 0 0 25px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(to right, var(--brown), var(--gold-dark));
+            color: var(--white);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .divider {
+            height: 4px;
+            background: linear-gradient(to right, var(--gold-light), var(--gold-dark));
+            margin: 10px 0 20px;
+        }
+        
+        /* Menu Navigation */
+        .menu-nav {
+            display: flex;
+            justify-content: center;
+            background: var(--brown);
+            padding: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .menu-btn {
+            background: var(--gold-light);
+            color: var(--brown);
+            border: none;
+            padding: 12px 30px;
+            margin: 5px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+        
+        .menu-btn:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .menu-btn.active {
+            background: var(--brown);
+            color: var(--gold-light);
+        }
+        
+        /* Menu Container */
+        .menu-container {
+            padding: 40px;
+        }
+        
+        .menu-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--brown);
+        }
+        
+        .menu-title h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .menu-title p {
+            color: var(--gold-dark);
+            font-style: italic;
+        }
+        
+        /* Menu Categories */
+        .menu-category {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #fcf9f3;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--gold);
+        }
+        
+        .category-title {
+            color: var(--gold-dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--gold);
+            font-size: 1.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .menu-item {
+            padding: 15px;
+            background: var(--white);
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .menu-checkbox {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            accent-color: var(--gold);
+        }
+        
+        .item-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--brown);
+        }
+        
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .print-btn {
+            background: var(--gold-dark);
+            color: var(--white);
+        }
+        
+        .download-btn {
+            background: var(--brown);
+            color: var(--gold-light);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--brown);
+            color: var(--gold-light);
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .footer h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .confidential {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gold-dark);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-container, .print-container * {
+                visibility: visible;
+            }
+            .print-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+        
+        .print-container {
+            display: none;
+            padding: 20px;
+        }
+        
+        .print-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gold);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 25px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .menu-container {
+                padding: 20px;
+            }
+            
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        /* Selection Counter */
+        .selection-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--gold-dark);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+            font-weight: bold;
+        }
+
+        .fixed-section {
+            background: transparent;
+            box-shadow: none;
+            border-left: none;
+            padding: 15px;
+        }
+
+        .fixed-section .menu-items {
+            display: block;
+        }
+
+        .fixed-section .menu-item {
+            box-shadow: none;
+            background: transparent;
+            padding: 5px 15px;
+        }
+
+        .note {
+            font-style: italic;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f4e9;
+            border-radius: 8px;
+        }
+        
+        /* PDF Template Elements */
+        .pdf-template {
+            display: none;
+            position: absolute;
+            left: -9999px;
+            width: 794px; /* A4 width in pixels */
+            padding: 40px;
+            background: white;
+            color: var(--brown);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .pdf-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .pdf-logo {
+            height: 80px;
+            margin-bottom: 15px;
+        }
+        
+        .pdf-title {
+            font-size: 28px;
+            color: var(--gold-dark);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        .pdf-subtitle {
+            font-size: 18px;
+            color: var(--brown);
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+        
+        .pdf-divider {
+            height: 4px;
+            background: linear-gradient(to right, var(--gold), var(--gold-dark));
+            margin: 15px 0;
+        }
+        
+        .pdf-section-title {
+            font-size: 20px;
+            color: var(--gold-dark);
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--gold-light);
+        }
+        
+        .pdf-menu-title {
+            font-size: 24px;
+            color: var(--brown);
+            margin: 15px 0;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .pdf-menu-subtitle {
+            font-size: 16px;
+            color: var(--gold-dark);
+            text-align: center;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        
+        .pdf-category-title {
+            font-size: 18px;
+            color: var(--brown);
+            margin: 20px 0 10px;
+            font-weight: bold;
+        }
+        
+        .pdf-item-list {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .pdf-item {
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+        
+        .pdf-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gold-light);
+            text-align: center;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .pdf-confidential {
+            margin-top: 20px;
+            font-size: 12px;
+            text-align: center;
+            color: var(--gray);
+        }
+        
+        .pdf-watermark {
+            position: absolute;
+            opacity: 0.05;
+            font-size: 120px;
+            transform: rotate(-45deg);
+            top: 40%;
+            left: 10%;
+            width: 80%;
+            text-align: center;
+            color: var(--gold-dark);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Regalia Lawn Catering</h1>
+            <p>Crafting Timeless Celebrations with Unparalleled Elegance</p>
+            <div class="divider"></div>
+            <p>Select menu items for your special day and print your customized menu</p>
+        </div>
+        
+        <div class="menu-nav">
+            <button class="menu-btn active" onclick="showMenu('king')">
+                <i class="fas fa-crown"></i> King Menu
+            </button>
+            <button class="menu-btn" onclick="showMenu('queen')">
+                <i class="fas fa-gem"></i> Queen Menu
+            </button>
+        </div>
+        
+        
+        <!-- King Menu -->
+        <div id="king-menu" class="menu-container">
+            <div class="menu-title">
+                <h2>King Menu</h2>
+                <p>Premium dining experience with extensive options for your royal celebration</p>
+            </div>
+            
+            <!-- SOUP Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>SOUP (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-soup')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-soup">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-soup1">
+                        <label for="king-soup1" class="item-name">Broccoli Soup</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-soup2">
+                        <label for="king-soup2" class="item-name">Hot N Sour Soup</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-soup3">
+                        <label for="king-soup3" class="item-name">Cream of Tomato</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-soup4">
+                        <label for="king-soup4" class="item-name">Veg Clear Soup</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-soup5">
+                        <label for="king-soup5" class="item-name">Lemon Coriander</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-soup6">
+                        <label for="king-soup6" class="item-name">Sweet Corn Soup</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-soup7">
+                        <label for="king-soup7" class="item-name">Veg Manchau Soup</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-soup8">
+                        <label for="king-soup8" class="item-name">Basil Soup</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-soup9">
+                        <label for="king-soup9" class="item-name">Cream of Spinach Soup</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Welcome Drink Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>WELCOME DRINK (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-drink')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-drink">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink1">
+                        <label for="king-drink1" class="item-name">Strawberry Shake</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink2">
+                        <label for="king-drink2" class="item-name">Mix Fruit Juice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink3">
+                        <label for="king-drink3" class="item-name">Fruit Punch</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink4">
+                        <label for="king-drink4" class="item-name">Kiwi Delight</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink5">
+                        <label for="king-drink5" class="item-name">Blue Lagoon</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink6">
+                        <label for="king-drink6" class="item-name">Pan Shake</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink7">
+                        <label for="king-drink7" class="item-name">Pineapple Shake</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink8">
+                        <label for="king-drink8" class="item-name">Assorted Cold Drink</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink9">
+                        <label for="king-drink9" class="item-name">Pista Punch</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink10">
+                        <label for="king-drink10" class="item-name">Orange Punch</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink11">
+                        <label for="king-drink11" class="item-name">Rose Delight</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink12">
+                        <label for="king-drink12" class="item-name">Pina Colada</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink13">
+                        <label for="king-drink13" class="item-name">Mango Shake</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink14">
+                        <label for="king-drink14" class="item-name">Virgin Mojito</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink15">
+                        <label for="king-drink15" class="item-name">Aam Pana</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink16">
+                        <label for="king-drink16" class="item-name">Seasonal Guava Paunch</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink17">
+                        <label for="king-drink17" class="item-name">Oreo Milk Shake</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-drink18">
+                        <label for="king-drink18" class="item-name">Masala Butter Milk</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Paneer Snacks Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>PANEER SNACKS (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-paneer')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-paneer">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer1">
+                        <label for="king-paneer1" class="item-name">Paneer Malai Tikka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer2">
+                        <label for="king-paneer2" class="item-name">Paneer Black Pepper</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer3">
+                        <label for="king-paneer3" class="item-name">Paneer Fingers</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer4">
+                        <label for="king-paneer4" class="item-name">Paneer Manchurian</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer5">
+                        <label for="king-paneer5" class="item-name">Garlic Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer6">
+                        <label for="king-paneer6" class="item-name">Paneer Seekh Kabab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer7">
+                        <label for="king-paneer7" class="item-name">Mozzarella Paneer Tikka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer8">
+                        <label for="king-paneer8" class="item-name">Chilli Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer9">
+                        <label for="king-paneer9" class="item-name">Paneer Achari Tikka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer10">
+                        <label for="king-paneer10" class="item-name">Paneer 65</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer11">
+                        <label for="king-paneer11" class="item-name">Paneer Cigar Roll</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer12">
+                        <label for="king-paneer12" class="item-name">Paneer Cutlet</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer13">
+                        <label for="king-paneer13" class="item-name">Paneer Hariyali Tikka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer14">
+                        <label for="king-paneer14" class="item-name">Paneer Sotiboti</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer15">
+                        <label for="king-paneer15" class="item-name">Paneer Ajwaini Tikka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer16">
+                        <label for="king-paneer16" class="item-name">Paneer Satey</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer17">
+                        <label for="king-paneer17" class="item-name">Palak Paneer Kabab</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Veg Snacks Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>VEG SNACKS (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-veg-snacks')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-veg-snacks">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks1">
+                        <label for="king-veg-snacks1" class="item-name">Curd Kabab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks2">
+                        <label for="king-veg-snacks2" class="item-name">Cheese Ball</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks3">
+                        <label for="king-veg-snacks3" class="item-name">Spring Roll</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks4">
+                        <label for="king-veg-snacks4" class="item-name">Cheese Potato Crispy</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks5">
+                        <label for="king-veg-snacks5" class="item-name">Sesame Toast</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks6">
+                        <label for="king-veg-snacks6" class="item-name">Corn Tikki</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks7">
+                        <label for="king-veg-snacks7" class="item-name">Veg Cutlet</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks8">
+                        <label for="king-veg-snacks8" class="item-name">Peanut Kabab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks9">
+                        <label for="king-veg-snacks9" class="item-name">Harabhara Kabab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks10">
+                        <label for="king-veg-snacks10" class="item-name">Shanghai Roll</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks11">
+                        <label for="king-veg-snacks11" class="item-name">Veg Lollypop</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks12">
+                        <label for="king-veg-snacks12" class="item-name">Veg Gold Coin</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks13">
+                        <label for="king-veg-snacks13" class="item-name">Dahi K Kabab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks14">
+                        <label for="king-veg-snacks14" class="item-name">Baby Corn Satey</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks15">
+                        <label for="king-veg-snacks15" class="item-name">Cheese Cigar Roll</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks16">
+                        <label for="king-veg-snacks16" class="item-name">Cheese Palak Roll</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks17">
+                        <label for="king-veg-snacks17" class="item-name">Crispy Veg Tandoori Platter</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks18">
+                        <label for="king-veg-snacks18" class="item-name">Chilli Mushroom</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks19">
+                        <label for="king-veg-snacks19" class="item-name">Veg Seekh Kabab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks20">
+                        <label for="king-veg-snacks20" class="item-name">Chilli Baby Corn</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-snacks21">
+                        <label for="king-veg-snacks21" class="item-name">Mushroom</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>CHAT (ANY FOUR)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-chat')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-chat">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat1">
+                        <label for="king-chat1" class="item-name">Pani Puri Two Types</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat2">
+                        <label for="king-chat2" class="item-name">Dahi Papdi Chat</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat3">
+                        <label for="king-chat3" class="item-name">Rajbhog</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat4">
+                        <label for="king-chat4" class="item-name">Dahi Wada</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat5">
+                        <label for="king-chat5" class="item-name">Dahi Gujiya</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat6">
+                        <label for="king-chat6" class="item-name">Moong Dal Chilla</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat7">
+                        <label for="king-chat7" class="item-name">Panki Chat</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat8">
+                        <label for="king-chat8" class="item-name">Raj Kachori</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat9">
+                        <label for="king-chat9" class="item-name">Pizza Papdi Chat</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat10">
+                        <label for="king-chat10" class="item-name">Dahi Bhalla</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat11">
+                        <label for="king-chat11" class="item-name">Corn Chat</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat12">
+                        <label for="king-chat12" class="item-name">Paneer Chilla</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat13">
+                        <label for="king-chat13" class="item-name">Jodhpuri Mirchi Chat</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat14">
+                        <label for="king-chat14" class="item-name">Aloo Tikki</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat15">
+                        <label for="king-chat15" class="item-name">Palak Patta Chat</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat16">
+                        <label for="king-chat16" class="item-name">Dahi Wada</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat17">
+                        <label for="king-chat17" class="item-name">Hyderabadi Dosa</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chat18">
+                        <label for="king-chat18" class="item-name">Basket Chat</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Paneer Sabji Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>PANEER SABJI (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-paneer-sabji')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-paneer-sabji">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji1">
+                        <label for="king-paneer-sabji1" class="item-name">Sandwich Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji2">
+                        <label for="king-paneer-sabji2" class="item-name">Paneer Punjabi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji3">
+                        <label for="king-paneer-sabji3" class="item-name">Amritsari Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji4">
+                        <label for="king-paneer-sabji4" class="item-name">Paneer Maharaja</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji5">
+                        <label for="king-paneer-sabji5" class="item-name">Paneer Butter Masala</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji6">
+                        <label for="king-paneer-sabji6" class="item-name">Paneer Patiala Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji7">
+                        <label for="king-paneer-sabji7" class="item-name">Makhana K.P. Roll</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji8">
+                        <label for="king-paneer-sabji8" class="item-name">Paneer Dhaba</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji9">
+                        <label for="king-paneer-sabji9" class="item-name">Paneer Ghotala</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji10">
+                        <label for="king-paneer-sabji10" class="item-name">Paneer Labadar</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji11">
+                        <label for="king-paneer-sabji11" class="item-name">Paneer Tikka Masala</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji12">
+                        <label for="king-paneer-sabji12" class="item-name">Paneer Lajawab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji13">
+                        <label for="king-paneer-sabji13" class="item-name">Saoji Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji14">
+                        <label for="king-paneer-sabji14" class="item-name">Paneer Pasand On Tava</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji15">
+                        <label for="king-paneer-sabji15" class="item-name">Kasturi Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji16">
+                        <label for="king-paneer-sabji16" class="item-name">Shahi Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji17">
+                        <label for="king-paneer-sabji17" class="item-name">Paneer Lachhedar</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji18">
+                        <label for="king-paneer-sabji18" class="item-name">Paneer Kolhapuri</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-paneer-sabji19">
+                        <label for="king-paneer-sabji19" class="item-name">Paneer Kofta</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Veg Sabji Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>VEG SABJI (ANY THREE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-veg-sabji')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-veg-sabji">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji1">
+                        <label for="king-veg-sabji1" class="item-name">Tava Veg</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji2">
+                        <label for="king-veg-sabji2" class="item-name">Veg Jalfrezy</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji3">
+                        <label for="king-veg-sabji3" class="item-name">Jhunka Bhakar Thecha</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji4">
+                        <label for="king-veg-sabji4" class="item-name">Veg Diwani Handi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji5">
+                        <label for="king-veg-sabji5" class="item-name">Veg Kheema</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji6">
+                        <label for="king-veg-sabji6" class="item-name">Kasturi Veg Anda Curry</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji7">
+                        <label for="king-veg-sabji7" class="item-name">Khada Veg Live</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji8">
+                        <label for="king-veg-sabji8" class="item-name">Veg Jaipuri</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji9">
+                        <label for="king-veg-sabji9" class="item-name">Baigan Bharta Bhakar</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji10">
+                        <label for="king-veg-sabji10" class="item-name">Navratan Korma</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji11">
+                        <label for="king-veg-sabji11" class="item-name">Corn Palak</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji12">
+                        <label for="king-veg-sabji12" class="item-name">Green Veg Live</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji13">
+                        <label for="king-veg-sabji13" class="item-name">Veg Saanj Savera</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji14">
+                        <label for="king-veg-sabji14" class="item-name">Methi Mutter Malai</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji15">
+                        <label for="king-veg-sabji15" class="item-name">Garden Veg</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-veg-sabji16">
+                        <label for="king-veg-sabji16" class="item-name">Mutter Makhana Curry</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dal Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>DAL (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-dal')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-dal">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-dal1">
+                        <label for="king-dal1" class="item-name">Dal Tadka Live</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-dal2">
+                        <label for="king-dal2" class="item-name">Dal Panchmel</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-dal3">
+                        <label for="king-dal3" class="item-name">Lasuni Dal</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-dal4">
+                        <label for="king-dal4" class="item-name">Dal Fry</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-dal5">
+                        <label for="king-dal5" class="item-name">Dal Do Pyaza</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-dal6">
+                        <label for="king-dal6" class="item-name">Dal Palak</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-dal7">
+                        <label for="king-dal7" class="item-name">Dal Makhani</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-dal8">
+                        <label for="king-dal8" class="item-name">Yellow Dal</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-dal9">
+                        <label for="king-dal9" class="item-name">Dal Maharni</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rice Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>RICE (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-rice')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-rice">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-rice1">
+                        <label for="king-rice1" class="item-name">Jeera Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-rice2">
+                        <label for="king-rice2" class="item-name">Veg Pulao</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-rice3">
+                        <label for="king-rice3" class="item-name">Biryani Rice Signature Dish</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-rice4">
+                        <label for="king-rice4" class="item-name">Jeera Mutter Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-rice5">
+                        <label for="king-rice5" class="item-name">Plain Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-rice6">
+                        <label for="king-rice6" class="item-name">Exotic Pulao</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-rice7">
+                        <label for="king-rice7" class="item-name">Steam Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-rice8">
+                        <label for="king-rice8" class="item-name">Masala Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-rice9">
+                        <label for="king-rice9" class="item-name">Kashmiri Pulao</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Indian Bread Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>INDIAN BREAD (ANY THREE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-bread')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-bread">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-bread1">
+                        <label for="king-bread1" class="item-name">Live Fulka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-bread2">
+                        <label for="king-bread2" class="item-name">Palak Puri</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-bread3">
+                        <label for="king-bread3" class="item-name">Tandoori Rumali</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-bread4">
+                        <label for="king-bread4" class="item-name">Simple Puri</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-bread5">
+                        <label for="king-bread5" class="item-name">Lachha Paratha</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-bread6">
+                        <label for="king-bread6" class="item-name">Butter Naan</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-bread7">
+                        <label for="king-bread7" class="item-name">Masala Puri</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-bread8">
+                        <label for="king-bread8" class="item-name">Baby Naan</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chinese Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>CHINESE (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-chinese')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-chinese">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chinese1">
+                        <label for="king-chinese1" class="item-name">Exotic Noodles</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chinese2">
+                        <label for="king-chinese2" class="item-name">Veg Ball Garlic Sauce</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chinese3">
+                        <label for="king-chinese3" class="item-name">Veg Hakka Noodles</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chinese4">
+                        <label for="king-chinese4" class="item-name">Veg Trippled Fried Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chinese5">
+                        <label for="king-chinese5" class="item-name">Paneer Schezwan Veg Noodles</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-chinese6">
+                        <label for="king-chinese6" class="item-name">Veg Schezwan Fried Rice</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sweet Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>SWEET (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-sweet')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-sweet">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet1">
+                        <label for="king-sweet1" class="item-name">Angoori Rasmalai</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet2">
+                        <label for="king-sweet2" class="item-name">Kesar Rasmalai</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet3">
+                        <label for="king-sweet3" class="item-name">Mango Rasmalai</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet4">
+                        <label for="king-sweet4" class="item-name">Oval Shape Gulab Jam</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet5">
+                        <label for="king-sweet5" class="item-name">Moong Badam Halwa</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet6">
+                        <label for="king-sweet6" class="item-name">Gajar Halwa</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet7">
+                        <label for="king-sweet7" class="item-name">Chapti Rasmalai</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet8">
+                        <label for="king-sweet8" class="item-name">Mawa Vati Gulab Jamun Based</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet9">
+                        <label for="king-sweet9" class="item-name">Shahi Moong Dal Halwa</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet10">
+                        <label for="king-sweet10" class="item-name">Sitafal Rabdi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet11">
+                        <label for="king-sweet11" class="item-name">Rabdi with Angoori Gulab Jamun</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-sweet12">
+                        <label for="king-sweet12" class="item-name">Jalebi</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desserts Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>DESSERTS (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('king-desserts')">Select All</button>
+                </h3>
+                <div class="menu-items" id="king-desserts">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-desserts1">
+                        <label for="king-desserts1" class="item-name">Ice Cream in 3 Flavors with Sauce</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-desserts2">
+                        <label for="king-desserts2" class="item-name">Stick Kulfi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="king-desserts3">
+                        <label for="king-desserts3" class="item-name">Faluda Kulfi</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Includes Section -->
+            <div class="menu-category fixed-section">
+                <h3 class="category-title">
+                    <span>INCLUDES</span>
+                </h3>
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <div class="item-name">Achar, Papad, Kitchen Salad & Green Salad</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-name">250 ML Bottle</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Note Section -->
+            <div class="note">
+                <p><strong>Note:</strong> You can add items of your choice to the banquet menu which will attract additional charges as per negotiation.</p>
+            </div>
+            
+            <div class="actions">
+                <button class="action-btn print-btn" onclick="preparePrint('king')">
+                    <i class="fas fa-print"></i> Print Selected Items
+                </button>
+                <button class="action-btn download-btn" onclick="downloadMenu('king')">
+                    <i class="fas fa-download"></i> Download Menu
+                </button>
+            </div>
+        </div>
+        
+        <!-- Queen Menu -->
+        <div id="queen-menu" class="menu-container" style="display:none;">
+            <div class="menu-title">
+                <h2>Queen Menu</h2>
+                <p>Elegant dining experience with exquisite options for your special celebration</p>
+            </div>
+            
+            <!-- SOUP Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>SOUP (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-soup')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-soup">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-soup1">
+                        <label for="queen-soup1" class="item-name">Cream of Tomato</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-soup2">
+                        <label for="queen-soup2" class="item-name">Veg Clear</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-soup3">
+                        <label for="queen-soup3" class="item-name">Veg Manchau</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-soup4">
+                        <label for="queen-soup4" class="item-name">Hot N Sour</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-soup5">
+                        <label for="queen-soup5" class="item-name">Lemon Coriander</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Welcome Drink Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>WELCOME DRINK (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-drink')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-drink">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink1">
+                        <label for="queen-drink1" class="item-name">Strawberry Shake</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink2">
+                        <label for="queen-drink2" class="item-name">Pista Punch</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink3">
+                        <label for="queen-drink3" class="item-name">Mango Shake</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink4">
+                        <label for="queen-drink4" class="item-name">Lassi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink5">
+                        <label for="queen-drink5" class="item-name">Pineapple Shake</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink6">
+                        <label for="queen-drink6" class="item-name">Assorted Cold Drink</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink7">
+                        <label for="queen-drink7" class="item-name">Orange Punch</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink8">
+                        <label for="queen-drink8" class="item-name">Mango Lassi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink9">
+                        <label for="queen-drink9" class="item-name">Fruit Punch</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink10">
+                        <label for="queen-drink10" class="item-name">Aam Pana Seasonal</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-drink11">
+                        <label for="queen-drink11" class="item-name">Guava Paunch</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Paneer Snacks Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>PANEER SNACKS (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-paneer')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-paneer">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer1">
+                        <label for="queen-paneer1" class="item-name">Chilli Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer2">
+                        <label for="queen-paneer2" class="item-name">Sesame Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer3">
+                        <label for="queen-paneer3" class="item-name">Paneer Hariyali Tikka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer4">
+                        <label for="queen-paneer4" class="item-name">Paneer Fingers</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer5">
+                        <label for="queen-paneer5" class="item-name">Paneer Tikka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer6">
+                        <label for="queen-paneer6" class="item-name">Paneer Malai Tikka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer7">
+                        <label for="queen-paneer7" class="item-name">Paneer 65</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer8">
+                        <label for="queen-paneer8" class="item-name">Paneer Achari Tikka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer9">
+                        <label for="queen-paneer9" class="item-name">Black Pepper Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer10">
+                        <label for="queen-paneer10" class="item-name">Paneer Saslic</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer11">
+                        <label for="queen-paneer11" class="item-name">Paneer Sotiboti</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer12">
+                        <label for="queen-paneer12" class="item-name">Paneer Ajwaini Tikka</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Veg Snacks Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>VEG SNACKS (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-veg-snacks')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-veg-snacks">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks1">
+                        <label for="queen-veg-snacks1" class="item-name">Cheese Ball</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks2">
+                        <label for="queen-veg-snacks2" class="item-name">Cheese Palak Roll</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks3">
+                        <label for="queen-veg-snacks3" class="item-name">Honey Chilli Potato</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks4">
+                        <label for="queen-veg-snacks4" class="item-name">Sesame Toast</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks5">
+                        <label for="queen-veg-snacks5" class="item-name">Veg Seekh Kabab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks6">
+                        <label for="queen-veg-snacks6" class="item-name">Spring Roll</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks7">
+                        <label for="queen-veg-snacks7" class="item-name">Shanghai Roll</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks8">
+                        <label for="queen-veg-snacks8" class="item-name">Peanut Kabab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks9">
+                        <label for="queen-veg-snacks9" class="item-name">Cheese Potato Crispy</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks10">
+                        <label for="queen-veg-snacks10" class="item-name">Veg Gold Coin</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks11">
+                        <label for="queen-veg-snacks11" class="item-name">Veg Lollypop</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks12">
+                        <label for="queen-veg-snacks12" class="item-name">Curd Kabab</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks13">
+                        <label for="queen-veg-snacks13" class="item-name">Crispy Veg</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg-snacks14">
+                        <label for="queen-veg-snacks14" class="item-name">Veg Manchurian Dry</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>CHAT (ANY THREE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-chat')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-chat">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat1">
+                        <label for="queen-chat1" class="item-name">Pani Puri</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat2">
+                        <label for="queen-chat2" class="item-name">Dahi Papdi Chat</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat3">
+                        <label for="queen-chat3" class="item-name">Dahi Wada</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat4">
+                        <label for="queen-chat4" class="item-name">Moong Dal Chilla</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat5">
+                        <label for="queen-chat5" class="item-name">Pan Patta Chat</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat6">
+                        <label for="queen-chat6" class="item-name">Bombay Bhel</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat7">
+                        <label for="queen-chat7" class="item-name">Dahi Bhalla</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat8">
+                        <label for="queen-chat8" class="item-name">Paneer Chilla</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat9">
+                        <label for="queen-chat9" class="item-name">Corn Chat</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat10">
+                        <label for="queen-chat10" class="item-name">Aloo Tikki</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chat11">
+                        <label for="queen-chat11" class="item-name">Dahi Gujiya</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Paneer Sabji Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>PANEER SABJI (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-paneer-sabji')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-paneer-sabji">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji1">
+                        <label for="queen-paneer-sabji1" class="item-name">Mutter Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji2">
+                        <label for="queen-paneer-sabji2" class="item-name">Paneer Lacchedar</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji3">
+                        <label for="queen-paneer-sabji3" class="item-name">Paneer Maharaja</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji4">
+                        <label for="queen-paneer-sabji4" class="item-name">Paneer Pasanda</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji5">
+                        <label for="queen-paneer-sabji5" class="item-name">Paneer Butter Masala</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji6">
+                        <label for="queen-paneer-sabji6" class="item-name">Sandwich Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji7">
+                        <label for="queen-paneer-sabji7" class="item-name">Paneer Ghotala</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji8">
+                        <label for="queen-paneer-sabji8" class="item-name">Paneer Labadar</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji9">
+                        <label for="queen-paneer-sabji9" class="item-name">Paneer Dhaba</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji10">
+                        <label for="queen-paneer-sabji10" class="item-name">Paneer Tikka Masala</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji11">
+                        <label for="queen-paneer-sabji11" class="item-name">Kadhai Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji12">
+                        <label for="queen-paneer-sabji12" class="item-name">Shahi Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji13">
+                        <label for="queen-paneer-sabji13" class="item-name">Palak Paneer</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji14">
+                        <label for="queen-paneer-sabji14" class="item-name">Paneer Kasturi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-paneer-sabji15">
+                        <label for="queen-paneer-sabji15" class="item-name">Paneer Kolhapuri</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Veg Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>VEG (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-veg')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-veg">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg1">
+                        <label for="queen-veg1" class="item-name">Tava Veg</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg2">
+                        <label for="queen-veg2" class="item-name">Kadhai Veg</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg3">
+                        <label for="queen-veg3" class="item-name">Veg Jalfrezy</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg4">
+                        <label for="queen-veg4" class="item-name">Jhunka Bhakar Thecha</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg5">
+                        <label for="queen-veg5" class="item-name">Kofta Curry</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg6">
+                        <label for="queen-veg6" class="item-name">Veg Divani Handi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg7">
+                        <label for="queen-veg7" class="item-name">Kolhapuri Veg</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg8">
+                        <label for="queen-veg8" class="item-name">Veg Jaipuri</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg9">
+                        <label for="queen-veg9" class="item-name">Baigan Bharta Bhakar</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg10">
+                        <label for="queen-veg10" class="item-name">Cheese Malai Kofta</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg11">
+                        <label for="queen-veg11" class="item-name">Cheese Corn Palak</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg12">
+                        <label for="queen-veg12" class="item-name">Chole Masala</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg13">
+                        <label for="queen-veg13" class="item-name">Mix Veg</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg14">
+                        <label for="queen-veg14" class="item-name">Green Veg Live</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg15">
+                        <label for="queen-veg15" class="item-name">Veg Saanj Savera</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg16">
+                        <label for="queen-veg16" class="item-name">Banarasi Kofta</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-veg17">
+                        <label for="queen-veg17" class="item-name">Veg Navratan Korma</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dal Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>DAL (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-dal')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-dal">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-dal1">
+                        <label for="queen-dal1" class="item-name">Dal Tadka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-dal2">
+                        <label for="queen-dal2" class="item-name">Dal Makhani</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-dal3">
+                        <label for="queen-dal3" class="item-name">Dal Fry</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-dal4">
+                        <label for="queen-dal4" class="item-name">Dal Panchmel</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-dal5">
+                        <label for="queen-dal5" class="item-name">Lasuni Dal</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-dal6">
+                        <label for="queen-dal6" class="item-name">Yellow Dal</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rice Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>RICE (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-rice')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-rice">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-rice1">
+                        <label for="queen-rice1" class="item-name">Jeera Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-rice2">
+                        <label for="queen-rice2" class="item-name">Biryani Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-rice3">
+                        <label for="queen-rice3" class="item-name">Jeera Mutter Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-rice4">
+                        <label for="queen-rice4" class="item-name">Veg Pulao</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-rice5">
+                        <label for="queen-rice5" class="item-name">Steam Rice</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-rice6">
+                        <label for="queen-rice6" class="item-name">Masala Rice</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Indian Bread Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>INDIAN BREAD (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-bread')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-bread">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-bread1">
+                        <label for="queen-bread1" class="item-name">Live Fulka</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-bread2">
+                        <label for="queen-bread2" class="item-name">Tandoori Roti</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-bread3">
+                        <label for="queen-bread3" class="item-name">Missi Roti</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-bread4">
+                        <label for="queen-bread4" class="item-name">Rumali</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-bread5">
+                        <label for="queen-bread5" class="item-name">Simple Puri</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-bread6">
+                        <label for="queen-bread6" class="item-name">Butter Naan</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-bread7">
+                        <label for="queen-bread7" class="item-name">Palak Puri</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-bread8">
+                        <label for="queen-bread8" class="item-name">Masala Puri</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chinese Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>CHINESE (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-chinese')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-chinese">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chinese1">
+                        <label for="queen-chinese1" class="item-name">Veg Noodles</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chinese2">
+                        <label for="queen-chinese2" class="item-name">Veg Schezwan Noodles</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chinese3">
+                        <label for="queen-chinese3" class="item-name">Veg Schezwan</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chinese4">
+                        <label for="queen-chinese4" class="item-name">Paneer Schezwan</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chinese5">
+                        <label for="queen-chinese5" class="item-name">Veg Hakka Noodles</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-chinese6">
+                        <label for="queen-chinese6" class="item-name">Veg Schezwan Noodles</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sweet Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>SWEET (ANY TWO)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-sweet')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-sweet">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet1">
+                        <label for="queen-sweet1" class="item-name">Angoori Rasmalai</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet2">
+                        <label for="queen-sweet2" class="item-name">Mango Rasmalai</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet3">
+                        <label for="queen-sweet3" class="item-name">Oval Shape Gulab Jam</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet4">
+                        <label for="queen-sweet4" class="item-name">Cham Cham</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet5">
+                        <label for="queen-sweet5" class="item-name">Chapti Rasmalai</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet6">
+                        <label for="queen-sweet6" class="item-name">Gajar Halwa</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet7">
+                        <label for="queen-sweet7" class="item-name">Rabdi with Angoori Gulab Jamun</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet8">
+                        <label for="queen-sweet8" class="item-name">Jalebi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet9">
+                        <label for="queen-sweet9" class="item-name">Shahi Moong Dal Halwa</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet10">
+                        <label for="queen-sweet10" class="item-name">Rasgulla</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-sweet11">
+                        <label for="queen-sweet11" class="item-name">Mawa Wati Gulab Jamun Based</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desserts Section -->
+            <div class="menu-category">
+                <h3 class="category-title">
+                    <span>DESSERTS (ANY ONE)</span>
+                    <button class="menu-btn" onclick="selectAllInCategory('queen-desserts')">Select All</button>
+                </h3>
+                <div class="menu-items" id="queen-desserts">
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-desserts1">
+                        <label for="queen-desserts1" class="item-name">Ice Cream with Sauce</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-desserts2">
+                        <label for="queen-desserts2" class="item-name">Strawberry Ice Cream</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-desserts3">
+                        <label for="queen-desserts3" class="item-name">Stick Kulfi</label>
+                    </div>
+                    <div class="menu-item">
+                        <input type="checkbox" class="menu-checkbox" id="queen-desserts4">
+                        <label for="queen-desserts4" class="item-name">Pista Ice Cream</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Includes Section -->
+            <div class="menu-category fixed-section">
+                <h3 class="category-title">
+                    <span>INCLUDES</span>
+                </h3>
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <div class="item-name">Achar, Papad, Kitchen Salad & Green Salad</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item-name">250 ML Bottle</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Note Section -->
+            <div class="note">
+                <p><strong>Note:</strong> You can add items of your choice to the banquet menu which will attract additional charges as per negotiation.</p>
+            </div>
+            
+            <div class="actions">
+                <button class="action-btn print-btn" onclick="preparePrint('queen')">
+                    <i class="fas fa-print"></i> Print Selected Items
+                </button>
+                <button class="action-btn download-btn" onclick="downloadMenu('queen')">
+                    <i class="fas fa-download"></i> Download Menu
+                </button>
+            </div>
+        </div>
+        
+        
+        <div class="footer">
+            <h3>Contact Regalia Lawn</h3>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>9730142948</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>regalia.lawns@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-globe"></i>
+                    <span>regalialawn.in</span>
+                </div>
+            </div>
+            <div class="confidential">
+                <p>This proposal is confidential and prepared exclusively for our valued clients.</p>
+                <p>© 2025 Regalia Lawn. All rights reserved.</p>
+            </div>
+        </div>
+        
+        <!-- Print Container (Hidden until print) -->
+        <div class="print-container" id="print-container">
+            <div class="print-header">
+                <h1>Regalia Lawn - Selected Menu Items</h1>
+                <p>Your personalized wedding menu selections</p>
+                <div class="divider"></div>
+            </div>
+            <div id="print-content"></div>
+            <div class="footer">
+                <p>Contact: 9730142948 | regalia.lawns@gmail.com | regalialawn.in</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PDF Template (Hidden) -->
+    <div id="pdf-template" class="pdf-template">
+        <div class="pdf-header">
+            <div class="pdf-title">Regalia Lawn Catering</div>
+            <div class="pdf-subtitle">Crafting Timeless Celebrations with Unparalleled Elegance</div>
+            <div class="pdf-divider"></div>
+        </div>
+        
+        <div id="pdf-content">
+            <!-- PDF content will be generated here -->
+        </div>
+        
+        <div class="pdf-watermark">REGALIA LAWN</div>
+        
+        <div class="pdf-footer">
+            <p>Phone: 9730142948 | Email: regalia.lawns@gmail.com | Website: regalialawn.in</p>
+            <div class="pdf-confidential">
+                <p>This proposal is confidential and prepared exclusively for our valued clients.</p>
+                <p>© 2025 Regalia Lawn. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="selection-counter no-print" id="selection-counter">
+        Selected Items: <span id="count">0</span>
+    </div>
+
+    <script>
+        // Show selected menu
+        function showMenu(menuType) {
+            document.getElementById('king-menu').style.display = 'none';
+            document.getElementById('queen-menu').style.display = 'none';
+            
+            document.querySelectorAll('.menu-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(`${menuType}-menu`).style.display = 'block';
+            event.target.classList.add('active');
+            
+            updateSelectionCount();
+        }
+        
+        // Select all items in a category
+        function selectAllInCategory(categoryId) {
+            const category = document.getElementById(categoryId);
+            const checkboxes = category.querySelectorAll('.menu-checkbox');
+            const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !anyChecked;
+            });
+            
+            updateSelectionCount();
+        }
+        
+        // Update selection counter
+        function updateSelectionCount() {
+            const activeMenu = document.querySelector('.menu-container[style="display:block;"]') || document.getElementById('king-menu');
+            const checkboxes = activeMenu.querySelectorAll('.menu-checkbox:checked');
+            document.getElementById('count').textContent = checkboxes.length;
+            
+            // Show counter only if items are selected
+            document.getElementById('selection-counter').style.display = 
+                checkboxes.length > 0 ? 'block' : 'none';
+        }
+        
+        // Prepare for printing
+        function preparePrint(menuType) {
+            const printContainer = document.getElementById('print-container');
+            const printContent = document.getElementById('print-content');
+            
+            // Clear previous content
+            printContent.innerHTML = '';
+            
+            // Get the current menu container
+            const menuContainer = document.getElementById(`${menuType}-menu`);
+            
+            // Add menu title
+            const menuTitle = menuContainer.querySelector('.menu-title').cloneNode(true);
+            printContent.appendChild(menuTitle);
+            
+            // Loop through categories
+            const categories = menuContainer.querySelectorAll('.menu-category:not(.fixed-section)');
+            
+            categories.forEach(category => {
+                const categoryTitle = category.querySelector('.category-title span').textContent;
+                const checkedItems = category.querySelectorAll('.menu-checkbox:checked');
+                
+                if (checkedItems.length > 0) {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'menu-category';
+                    categoryDiv.innerHTML = `<h3 class="category-title">${categoryTitle}</h3>`;
+                    
+                    const itemsDiv = document.createElement('div');
+                    itemsDiv.className = 'menu-items';
+                    
+                    checkedItems.forEach(item => {
+                        const itemName = item.nextElementSibling.textContent;
+                        itemsDiv.innerHTML += `
+                            <div class="menu-item">
+                                <div class="item-name">${itemName}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    categoryDiv.appendChild(itemsDiv);
+                    printContent.appendChild(categoryDiv);
+                }
+            });
+            
+            // Add fixed sections
+            const fixedSections = menuContainer.querySelectorAll('.fixed-section, .note');
+            fixedSections.forEach(section => {
+                const clone = section.cloneNode(true);
+                printContent.appendChild(clone);
+            });
+            
+            // Show print container
+            printContainer.style.display = 'block';
+            
+            // Print
+            window.print();
+            
+            // Hide print container after printing
+            setTimeout(() => {
+                printContainer.style.display = 'none';
+            }, 500);
+        }
+        
+        // Generate PDF for download
+        function downloadMenu(menuType) {
+            const { jsPDF } = window.jspdf;
+            const pdfContent = document.getElementById('pdf-content');
+            const pdfTemplate = document.getElementById('pdf-template');
+            
+            // Clear previous content
+            pdfContent.innerHTML = '';
+            
+            // Get the current menu container
+            const menuContainer = document.getElementById(`${menuType}-menu`);
+            
+            // Add menu title
+            const menuTitle = menuContainer.querySelector('.menu-title h2').textContent;
+            const menuDescription = menuContainer.querySelector('.menu-title p').textContent;
+            
+            pdfContent.innerHTML += `
+                <div class="pdf-menu-title">${menuTitle}</div>
+                <div class="pdf-menu-subtitle">${menuDescription}</div>
+                <div class="pdf-divider"></div>
+            `;
+            
+            // Loop through categories
+            const categories = menuContainer.querySelectorAll('.menu-category:not(.fixed-section)');
+            
+            categories.forEach(category => {
+                const categoryTitle = category.querySelector('.category-title span').textContent;
+                const checkedItems = category.querySelectorAll('.menu-checkbox:checked');
+                
+                if (checkedItems.length > 0) {
+                    let itemsHTML = '';
+                    checkedItems.forEach(item => {
+                        const itemName = item.nextElementSibling.textContent;
+                        itemsHTML += `<div class="pdf-item">• ${itemName}</div>`;
+                    });
+                    
+                    pdfContent.innerHTML += `
+                        <div class="pdf-category-title">${categoryTitle}</div>
+                        <div class="pdf-item-list">${itemsHTML}</div>
+                    `;
+                }
+            });
+            
+            // Add fixed sections
+            const fixedSections = menuContainer.querySelectorAll('.fixed-section, .note');
+            fixedSections.forEach(section => {
+                const clone = section.cloneNode(true);
+                // Remove buttons and inputs
+                clone.querySelectorAll('button, input').forEach(el => el.remove());
+                pdfContent.appendChild(clone);
+            });
+            
+            // Show the template to capture
+            pdfTemplate.style.display = 'block';
+            
+            // Generate PDF
+            html2canvas(pdfTemplate, {
+                scale: 2,
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'pt', 'a4');
+                const imgWidth = pdf.internal.pageSize.getWidth();
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                let position = 0;
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                
+                // Add first page
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                position -= pageHeight;
+                
+                // Add additional pages if needed
+                while (position > -imgHeight) {
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    position -= pageHeight;
+                }
+                
+                // Save the PDF
+                pdf.save(`Regalia_Lawn_${menuType}_Menu.pdf`);
+                
+                // Hide template
+                pdfTemplate.style.display = 'none';
+            });
+        }
+        
+        // Add event listeners to checkboxes
+        document.querySelectorAll('.menu-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', updateSelectionCount);
+        });
+        
+        // Initialize the selection count
+        updateSelectionCount();
+    </script>
+</body>
+</html>
