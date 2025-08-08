@@ -727,10 +727,10 @@
                             <label for="eventDate">Event Date</label>
                             <input type="date" id="eventDate" value="2024-06-22">
                         </div>
-                        <div class="form-group">
-                            <label for="dueDate">Due Date</label>
-                            <input type="date" id="dueDate" value="2023-12-15">
-                        </div>
+                        <!-- <div class="form-group"> -->
+                            <!-- <label for="dueDate">Due Date</label> -->
+                            <!-- <input type="date" id="dueDate" value="2023-12-15"> -->
+                        <!-- </div> -->
                     </div>
                     
                     <div class="navigation">
@@ -773,11 +773,11 @@
                     
                     <div class="form-row" style="margin-top: 30px;">
                         <div class="form-group">
-                            <label for="advanceAmount">Advance Amount ($)</label>
+                            <label for="advanceAmount">Advance Amount (₹)</label>
                             <input type="number" id="advanceAmount" min="0" step="0.01" value="5000.00">
                         </div>
                         <div class="form-group">
-                            <label for="balanceAmount">Balance Amount ($)</label>
+                            <label for="balanceAmount">Balance Amount (₹)</label>
                             <input type="number" id="balanceAmount" min="0" step="0.01" value="11500.00">
                         </div>
                     </div>
@@ -814,7 +814,7 @@
                     <p><strong>Invoice #:</strong> <span id="previewInvoiceNumber">RL-2023-045</span></p>
                     <p><strong>Date:</strong> <span id="previewInvoiceDate">October 15, 2023</span></p>
                     <p><strong>Event Date:</strong> <span id="previewEventDate">June 22, 2024</span></p>
-                    <p><strong>Due Date:</strong> <span id="previewDueDate">December 15, 2023</span></p>
+                    <!-- <p><strong>Due Date:</strong> <span id="previewDueDate">December 15, 2023</span></p> -->
                 </div>
             </div>
 
@@ -834,8 +834,8 @@
                         <td>Venue Rental</td>
                         <td>Premium garden venue for ceremony & reception</td>
                         <td>1</td>
-                        <td>$5,500.00</td>
-                        <td>$5,500.00</td>
+                        <td>₹5,500.00</td>
+                        <td>₹5,500.00</td>
                     </tr>
                 </tbody>
             </table>
@@ -843,23 +843,19 @@
             <div class="payment-summary">
                 <div class="payment-row">
                     <span class="payment-label">Subtotal:</span>
-                    <span class="payment-value" id="subtotalAmount">$0.00</span>
-                </div>
-                <div class="payment-row">
-                    <span class="payment-label">Tax (10%):</span>
-                    <span class="payment-value" id="taxAmount">$0.00</span>
+                    <span class="payment-value" id="subtotalAmount">₹0.00</span>
                 </div>
                 <div class="payment-row total-row">
                     <span class="payment-label">Total Amount:</span>
-                    <span class="payment-value" id="totalAmount">$0.00</span>
+                    <span class="payment-value" id="totalAmount">₹0.00</span>
                 </div>
                 <div class="payment-row">
                     <span class="payment-label">Advance Paid:</span>
-                    <span class="payment-value" id="advanceDisplay">$0.00</span>
+                    <span class="payment-value" id="advanceDisplay">₹0.00</span>
                 </div>
                 <div class="payment-row total-row">
                     <span class="payment-label">Balance Due:</span>
-                    <span class="payment-value" id="balanceDisplay">$0.00</span>
+                    <span class="payment-value" id="balanceDisplay">₹0.00</span>
                 </div>
             </div>
 
@@ -876,13 +872,13 @@
             </div>
 
             <div class="signature">
-                <p>Authorized Signature</p>
-                <p>Jennifer Parker, Event Director</p>
+                <p>This is a computer-generated invoice</p>
+                <p>No signature is required</p>
             </div>
 
             <div class="footer">
-                <p>Regalia Lawn • 456 Garden Avenue, Bloomfield, CA 90210</p>
-                <p>contact@regalialawn.com • (555) 987-6543 • www.regalialawn.com</p>
+                <p>Regalia Lawn • 27/2, Nara Road, Nagpur</p>
+                <p>regalialawns@gmail.com • +91 9730142948 • www.regalialawn.in</p>
                 <p style="margin-top: 10px;">Thank you for choosing Regalia Lawn for your special day!</p>
             </div>
             
@@ -1016,8 +1012,8 @@
                 const eventDate = document.getElementById('eventDate').value;
                 document.getElementById('previewEventDate').textContent = eventDate ? formatDate(eventDate) : 'June 22, 2024';
                 
-                const dueDate = document.getElementById('dueDate').value;
-                document.getElementById('previewDueDate').textContent = dueDate ? formatDate(dueDate) : 'December 15, 2023';
+                <!-- const dueDate = document.getElementById('dueDate').value; -->
+                <!-- document.getElementById('previewDueDate').textContent = dueDate ? formatDate(dueDate) : 'December 15, 2023'; -->
                 
                 // Collect services
                 const servicesTable = document.getElementById('servicesTable').querySelector('tbody');
@@ -1039,8 +1035,8 @@
                         <td>${name}</td>
                         <td>${desc}</td>
                         <td>${quantity}</td>
-                        <td>$${price.toFixed(2)}</td>
-                        <td>$${total.toFixed(2)}</td>
+                        <td>₹${price.toFixed(2)}</td>
+                        <td>₹${total.toFixed(2)}</td>
                     `;
                     servicesTable.appendChild(tr);
                 });
@@ -1055,11 +1051,11 @@
                 const balanceAmount = parseFloat(document.getElementById('balanceAmount').value) || 0;
                 
                 // Update amounts display
-                document.getElementById('subtotalAmount').textContent = `$${subtotal.toFixed(2)}`;
-                document.getElementById('taxAmount').textContent = `$${tax.toFixed(2)}`;
-                document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
-                document.getElementById('advanceDisplay').textContent = `$${advanceAmount.toFixed(2)}`;
-                document.getElementById('balanceDisplay').textContent = `$${balanceAmount.toFixed(2)}`;
+                document.getElementById('subtotalAmount').textContent = `₹${subtotal.toFixed(2)}`;
+                // document.getElementById('taxAmount').textContent = `₹${tax.toFixed(2)}`;
+                document.getElementById('totalAmount').textContent = `₹${total.toFixed(2)}`;
+                document.getElementById('advanceDisplay').textContent = `₹${advanceAmount.toFixed(2)}`;
+                document.getElementById('balanceDisplay').textContent = `₹${balanceAmount.toFixed(2)}`;
                 
                 // Show invoice preview
                 document.getElementById('invoiceContent').classList.add('visible');
